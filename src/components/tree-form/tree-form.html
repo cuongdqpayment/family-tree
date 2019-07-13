@@ -1,0 +1,128 @@
+<div *ngFor="let it of treeData; let idx = index" [style.padding-left]="level?'15px':'0px'">
+
+    <ion-grid no-padding>
+        <ion-row>
+            <ion-col col-1 style="margin:auto;text-align:center">
+                <ion-icon item-start *ngIf="it.subs?.length" (click)="toggleChildren(it)" style="font-size: 2em" [style.color]="it.visible?'darkgoldenrod':'darkblue'" name="{{it.visible?'remove-circle':'add-circle'}}" tappable></ion-icon>
+                <ion-icon item-start *ngIf="!it.subs?.length" style="font-size: 2em; color: green" name="{{it.icon}}"></ion-icon>
+            </ion-col>
+            <ion-col>
+                <ion-item class="tree-input-item" [attr.tappable]="it.click" (click)="onClickItem(it, idx, treeData)">
+
+                    <ion-avatar item-start *ngIf="it.avatar" tappable (click)="onClickMore(it, idx, treeData)"><img [src]="it.avatar"></ion-avatar>
+                    
+                    <!-- title view -->
+                    <ion-label *ngIf="it.type === 'title'" text-wrap [style.font-size]="it.size?it.size:'1em'">{{it.name}}</ion-label>
+                    
+                    <!-- detail view -->
+                    <strong item-start text-wrap *ngIf="it.type === 'detail'">
+                        {{it.name}}
+                    </strong>
+                    <span text-wrap item-end *ngIf="it.type === 'detail'&&!it.pipe_date">
+                        {{it.value}}
+                    </span>
+                    <span text-wrap item-end *ngIf="it.type === 'detail'&&it.pipe_date">
+                        {{it.value| date:it.pipe_date}}
+                    </span>
+
+                    <!-- input text-area -->
+                    <ion-label *ngIf="it.type === 'text_area'&&it.invalid" floating color="danger" text-wrap style="text-align: justify;">{{it.hint}}(*)</ion-label>
+                    <ion-icon *ngIf="it.type === 'text_area'&&it.icon" item-left name="{{it.icon}}"></ion-icon>
+                    <ion-textarea *ngIf="it.type === 'text_area'" rows="6" cols="20" placeholder={{it.name}} [(ngModel)]="it.value"></ion-textarea>
+             
+                    <!-- input text -->
+                    <ion-label *ngIf="it.type == 'text'&&it.invalid" floating color="danger" text-wrap style="text-align: justify;">{{it.hint}}(*)</ion-label>
+                    <ion-icon *ngIf="it.type == 'text'&&it.icon" item-left name="{{it.icon}}"></ion-icon>
+                    <ion-input *ngIf="it.type == 'text'" type="{{it.input_type}}" placeholder={{it.name?it.name:it.hint}} [(ngModel)]="it.value" [disabled]="it.disabled"></ion-input>
+   
+                    <!-- input password -->
+                    <ion-label *ngIf="it.type === 'password'&&it.invalid" floating color="danger" text-wrap style="text-align: justify;">{{it.hint}}(*)</ion-label>
+                    <ion-icon *ngIf="it.type === 'password'&&it.icon" item-left name="{{it.icon}}"></ion-icon>
+                    <ion-input *ngIf="it.type === 'password'" [type]="password_type" placeholder={{it.name}} [(ngModel)]="it.value"></ion-input>
+                    <button *ngIf="it.type === 'password'" ion-button clear color="dark" type="button" item-right (click)="togglePasswordMode()">
+                        <ion-icon name="{{eye}}"> </ion-icon>
+                    </button>
+
+                    <!-- check box -->
+                    <ion-label *ngIf="it.type === 'check'" color="primary" text-wrap style="text-align: justify;">{{it.name}}</ion-label>
+                    <ion-checkbox *ngIf="it.type === 'check'" color="primary" [(ngModel)]="it.value"></ion-checkbox>
+
+                    <!-- radio select -->
+                    <ion-list *ngIf="it.type === 'radio'" radio-group [(ngModel)]="it.value">
+                        <ion-list-header>
+                            <ion-icon item-start name="{{it.icon}}"></ion-icon>
+                            <ion-label color="dark" text-wrap style="text-align: justify;">{{it.name}}</ion-label>
+                        </ion-list-header>
+                        <div *ngFor="let myRad of it.options">
+                            <ion-label color="secondary" text-wrap style="text-align: justify;">{{myRad.name}}</ion-label>
+                            <ion-radio value="{{myRad.value}}"></ion-radio>
+                        </div>
+                    </ion-list>
+
+                    <!-- single select -->
+                    <ion-icon *ngIf="it.type === 'select'&&it.icon" item-left name="{{it.icon}}"></ion-icon>
+                    <ion-label *ngIf="it.type === 'select'" color="primary" text-wrap style="text-align: justify;">{{it.name}}</ion-label>
+                    <ion-select *ngIf="it.type === 'select'" [(ngModel)]="it.value" style="background-color: rgb(0, 190, 73); color:whitesmoke; border-radius: 1em;">
+                        <ion-option *ngFor="let mySet of it.options" value="{{mySet.value}}" >{{mySet.name}}</ion-option>
+                    </ion-select>
+
+                    <!-- multiple select -->
+                    <ion-icon *ngIf="it.type === 'select_multiple'&&it.icon" item-left name="{{it.icon}}"></ion-icon>
+                    <ion-label *ngIf="it.type === 'select_multiple'" color="primary" text-wrap style="text-align: justify;">{{it.name}}</ion-label>
+                    <ion-select *ngIf="it.type === 'select_multiple'" [(ngModel)]="it.value" multiple="true" style="background-color: rgb(0, 190, 73); color:whitesmoke; border-radius: 1em;">
+                        <ion-option *ngFor="let mySet of it.options" value="{{mySet.value}}">{{mySet.name}}</ion-option>
+                    </ion-select>
+
+                    <!-- toggle check -->
+                    <ion-icon *ngIf="it.type === 'toggle'" name="{{it.icon}}" item-start color="primary"></ion-icon>
+                    <ion-label *ngIf="it.type === 'toggle'" color="primary" text-wrap style="text-align: justify;">{{it.name?it.name:it.hint}}</ion-label>
+                    <ion-toggle *ngIf="it.type === 'toggle'" color="{{it.color}}" [(ngModel)]="it.value"></ion-toggle>
+
+                    <!-- date time-->
+                    <ion-label *ngIf="it.type === 'datetime'&&it.invalid" color="danger">{{it.hint}}(*)</ion-label>
+                    <ion-label *ngIf="it.type === 'datetime'&&!it.invalid">{{it.name}}</ion-label>
+                    <ion-datetime *ngIf="it.type === 'datetime'" displayFormat="{{it.display}}" pickerFormat="{{it.picker}}" [(ngModel)]="it.value"></ion-datetime>
+
+                    <!-- range adjust -->
+                    <ion-label *ngIf="it.type === 'range'&&it.name" color="primary" text-wrap style="text-align: justify; font-size: 1.3em">{{it.name}}</ion-label>
+                    <ion-range *ngIf="it.type === 'range'" min="{{it.min}}" max="{{it.max}}" color="{{it.color}}" pin="true" snaps="true" [(ngModel)]="it.value">
+                        <ion-icon range-left small name="{{it.icon}}"></ion-icon>
+                        <ion-icon range-right name="{{it.icon}}"></ion-icon>
+                    </ion-range>
+                    
+                    <!-- rang text star mark -->
+                    <ion-range *ngIf="it.type == 'range-star'" min="{{it.min}}" max="{{it.max}}" color="{{it.color}}" pin="true" snaps="true" [(ngModel)]="it.value">
+                        <ion-label *ngIf="it.name" range-left style="font-size: 1em;  color:#488aff">{{it.name}}</ion-label>
+                        <ion-icon *ngIf="!it.name" range-left style="font-size: 1.5em; color: #f5e93dcc" name="{{it.icon}}"></ion-icon>
+                        <ion-icon range-right style="font-size: 3em; color: #f5e93dcc" name="{{it.icon}}"></ion-icon>
+                    </ion-range>
+
+                    <!-- rang text with value -->
+                    <ion-range *ngIf="it.type == 'range-text'" min="{{it.min}}" max="{{it.max}}" color="{{it.color}}" snaps="true" [(ngModel)]="it.value" >
+                        <ion-label range-left color="primary" *ngIf="it.name&&it.name.length<=20">{{it.name}}</ion-label>
+                        <ion-label range-right style="background-color: darkblue; color:whitesmoke; border-radius: 0.3em;">{{it.value}} {{it.hint}}</ion-label>
+                    </ion-range>
+                    
+                    <!-- nút sinh sự kiện emit lên cấp trên -->
+                    <ion-icon item-end *ngIf="it.emit_parent" name="open" tappable (click)="onClickEmit(it, idx, treeData)"></ion-icon>
+                    
+                    <!-- Nút bấm thao tác hiển thị thêm thông tin -->
+                    <ion-icon item-end *ngIf="it.is_more" name="more" tappable (click)="onClickMore(it, idx, treeData)"></ion-icon>
+                    
+                    <!-- Nút mở rộng hay đóng lại riêng từng nhóm -->
+                    <ion-icon item-end *ngIf="it.subs?.length" [style.color]="it.visible?'darkgoldenrod':'darkblue'" name="{{it.visible?'ios-arrow-up':'ios-arrow-down'}}" tappable (click)="onClickExpand(it, idx, treeData)"></ion-icon>
+
+                </ion-item>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <tree-form 
+    [treeData]="it.subs" 
+    *ngIf="it.visible" 
+    [level]="(level+1)" 
+    [callback]="callback" 
+    (onChangeSub)="changeParent($event)">
+    </tree-form>
+
+</div>

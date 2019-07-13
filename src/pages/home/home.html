@@ -1,0 +1,117 @@
+<ion-header *ngIf="dynamicTree?.title">
+    <ion-toolbar>
+      <ion-buttons left >
+        <button ion-button menuToggle color="primary">
+          <ion-icon name="menu"></ion-icon>
+        </button>
+      </ion-buttons>
+  
+      <ion-title>{{dynamicTree?.title}}</ion-title>
+  
+      <ion-buttons right *ngIf="userInfo">
+        <!-- <button *ngIf="chatRooms||chatFriends|| unreadMssages" class="badge-background" ion-button icon-only color="primary" (click)="onClickChatRoom()">
+          <ion-icon name="ios-chatbubbles"></ion-icon>
+          <ion-badge *ngIf="unreadMssages?.length>0" class="badge-alert" color="danger">{{ (unreadMssages?.length>99?'99+':unreadMssages?.length)}}</ion-badge>
+        </button> -->
+        <!-- <button *ngIf="contacts || chatFriends || chatNewFriends" class="badge-background" ion-button icon-only color="primary" (click)="onClickChatFriend()">
+          <ion-icon name="md-contacts"></ion-icon>
+          <ion-badge *ngIf="chatNewFriends?.length>0" class="badge-alert" color="danger">{{ (chatNewFriends?.length>99?'99+':chatNewFriends?.length) }}</ion-badge>
+        </button> -->
+        <button *ngIf="mySocket" class="badge-background" ion-button icon-only color="primary" (click)="onClickChatUser()">
+          <ion-icon name="contact"></ion-icon>
+          <ion-badge *ngIf="mySocket?.sockets?.length>1" class="badge-alert" color="danger">{{ (mySocket?.sockets?.length>99?'99+':mySocket?.sockets?.length) }}</ion-badge>
+        </button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content no-padding class="background-page">
+  
+    <!-- Phần bộ công cụ kéo xuống đọc dữ liệu -->
+    <ion-refresher (ionRefresh)="doInfinite($event,'UP')">
+      <ion-refresher-content 
+        pullingIcon="arrow-dropdown" 
+        pullingText="Load dữ liệu mới hơn..." 
+        refreshingSpinner="circles"
+        refreshingText="Đang tải...">
+      </ion-refresher-content>
+    </ion-refresher>
+    
+    <!-- offset-xl-3 col-xl-6 
+    offset-lg-2 col-lg-8
+    offset-md-1 col-md-10 
+    col-sm-12 -->
+  
+  
+    <!-- Thanh công cụ để nhập tin tức -->
+    <ion-item  *ngIf="userInfo" (click)="onClickPostNews(userInfo)">
+      <ion-avatar item-start>
+        <img *ngIf="userInfo?.data?.image" [src]="userInfo?.data?.image">
+        <img *ngIf="!(userInfo?.data?.image)" src="assets/imgs/no-image-go.jpg">
+      </ion-avatar>
+      <p class="input-item">Bạn chia sẻ gì nào{{(userInfo?.data?.nickname?", "+userInfo?.data?.nickname:"")}}?</p>
+      <!-- <button item-end icon-only ion-button clear color="primary">
+        <ion-icon name="images"></ion-icon>
+      </button> -->
+    </ion-item>
+    
+  
+      <ion-grid no-padding>
+      <ion-row no-padding>
+        <ion-col no-padding 
+        class="background-card grid-border" 
+        text-center 
+        col-12 
+        *ngFor="let it of dynamicTree?.items">
+            
+          <ion-row no-padding *ngIf="it">
+            <ion-col no-padding class="background-card card-background-parent">
+              <!-- Tiêu đề thông tin và các điều hướng bản tin này -->
+              <user-card [userData]="it" [ownerData]="userInfo" [contactData]="contacts" (onClickSub)="onClickMore($event,it?.id)"></user-card>
+  
+              <!-- Nội dung thông tin được view và điều hướng xem thông tin -->
+              <!--content_cache sẽ ghi thành content đã gán link, 
+                url là mãng url liên kết, 
+                details là mãng thông tin chi tiết được dịch ra của url đó -->
+              <content-card *ngIf="it?.content"
+                [contentData] = "it?.content"
+                [urlData] = "it?.content_cache" 
+                [showDetails]="it?.show_detail" 
+                (onClickSub)="onClickOpenLink($event,it?.id)"
+                (onClickImage)="onClickImageLink($event, it)"
+                ></content-card>
+  
+              <!-- Các hình ảnh đính kèm nằm ở gần cuối (xem lại bố trí trên web như card-content) -->
+              <div *ngIf="it?.medias && it?.medias?.length>0" class="background-height">
+                <image-card [imageData] = "it?.medias" (onClickSub)="onClickMedia(it)"></image-card>
+              </div>
+
+              <!-- Các file đính kèm không phải loại type==1 để hiển thị liệt kê kiểu file -->
+              <ion-item *ngFor="let file of it?.files; let idx=index;">
+                  <ion-avatar item-start tappable (click)="onClickViewFile(file)">
+                      <img src="{{file | imageSrc}}">
+                  </ion-avatar>
+                  <ion-label>{{file.alt}}</ion-label>
+                  <button item-end icon-only ion-button clear color="primary" (click)="onClickViewFile(file)">
+                      <ion-icon name="cloud-download"></ion-icon>
+                  </button>
+              </ion-item>
+  
+              <!-- Các kết quả và hành động cho người dùng nằm ở cuối -->
+              <social-card [ownerData]="userInfo" [resultData]="it?.results" [actionData]="it?.actions" (onClickSub)="onClickAction($event,it?.id)"></social-card>
+              
+            </ion-col>
+          </ion-row>
+  
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event,'DOWN')">
+      <ion-infinite-scroll-content 
+      loadingSpinner="bubbles" 
+      loadingText="Load dữ liệu cũ hơn...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  
+  </ion-content>

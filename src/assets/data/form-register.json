@@ -1,0 +1,18 @@
+{
+    "items": [
+      { "name": "Thông tin cá nhân","type": "title"}
+      , { "id": 10,"name": "Họ và tên","type": "text","input_type": "text","icon": "person" }
+      , { "id": 11,"name": "Điện thoại","hint": "Yêu cầu định dạng số điện thoại nhé","type": "text","input_type": "tel","icon": "call","validators": [{ "pattern": "^[0-9]*$" }]}
+      , { "id": 12,"name": "email","hint": "Yêu cầu định dạng email nhé","type": "text","input_type": "email","icon": "mail","validators": [{ "pattern": "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$" }]}
+      , {
+        "name": "BUTTON GROUP","type": "button"
+        ,"options": [
+          { "name": "Reset", "next": "RESET" }
+          , { "name": "Exit", "next": "EXIT" }
+          , { "name": "Close", "next": "CLOSE" }
+          , { "name": "Back", "next": "BACK"}
+          , { "name": "Continue", "next": "CONTINUE"}
+          , { "name": "Register","url": "https://c3.mobifone.vn/api/ext-auth/save-info", "command": "SAVE-INFO"}
+        ]
+      }]
+}

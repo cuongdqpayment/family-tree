@@ -1,0 +1,19 @@
+<!-- Ô nhập nội dung và 
+    các chức năng thêm ảnh, 
+    chức năng đưa public/private, 
+    đưa vào album/ảnh avatar/...
+    tag ai vào
+    thêm địa điểm checking vào...
+ -->
+<!-- input text-area -->
+<ion-item no-lines>
+    <div class="card-background-relative">
+        <ion-textarea rows="1" 
+        class="text-area" 
+        placeholder="Bạn đang nghĩ gì?" 
+        [(ngModel)]="message"  
+        (keyup)="onKeyup($event)" 
+        (keydown)="onKeydown($event)" 
+        autosize></ion-textarea>
+    </div>
+</ion-item>

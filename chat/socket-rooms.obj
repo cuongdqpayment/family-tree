@@ -1,0 +1,39 @@
+socket.adapter.rooms???
+{ '/c3-chat#tx8INGblK9x9jJTyAAAE': 
+   Room {
+     sockets: { '/c3-chat#tx8INGblK9x9jJTyAAAE': true },
+     length: 1 },
+  CUONGDQ: 
+   Room {
+     sockets: 
+      { '/c3-chat#tx8INGblK9x9jJTyAAAE': true,
+        '/c3-chat#4hIGTMrvI_LkM2sqAAAF': true },
+     length: 2 },
+  'Phong ban': 
+   Room {
+     sockets: 
+      { '/c3-chat#tx8INGblK9x9jJTyAAAE': true,
+        '/c3-chat#4hIGTMrvI_LkM2sqAAAF': true },
+     length: 2 },
+  'Gia dinh': 
+   Room {
+     sockets: 
+      { '/c3-chat#tx8INGblK9x9jJTyAAAE': true,
+        '/c3-chat#4hIGTMrvI_LkM2sqAAAF': true },
+     length: 2 },
+  'Ban be': 
+   Room {
+     sockets: 
+      { '/c3-chat#tx8INGblK9x9jJTyAAAE': true,
+        '/c3-chat#4hIGTMrvI_LkM2sqAAAF': true },
+     length: 2 },
+  'Cong viec': 
+   Room {
+     sockets: 
+      { '/c3-chat#tx8INGblK9x9jJTyAAAE': true,
+        '/c3-chat#4hIGTMrvI_LkM2sqAAAF': true },
+     length: 2 },
+  '/c3-chat#4hIGTMrvI_LkM2sqAAAF': 
+   Room {
+     sockets: { '/c3-chat#4hIGTMrvI_LkM2sqAAAF': true },
+     length: 1 } }

@@ -1,0 +1,13 @@
+<ion-row *ngIf="isRotator">
+    <ion-col style="text-align: center;">
+        <button ion-button icon-only round color="primary" (click)="onClickRotate('LEFT')">
+            <ion-icon name="md-undo"></ion-icon>
+        </button>
+    </ion-col>
+    <ion-col style="text-align: center;">
+        <button ion-button icon-only round color="primary" (click)="onClickRotate('RIGHT')">
+            <ion-icon name="md-redo"></ion-icon>
+        </button>
+    </ion-col>
+    </ion-row>
+<div #imageEdit (update)="newResult()"></div>

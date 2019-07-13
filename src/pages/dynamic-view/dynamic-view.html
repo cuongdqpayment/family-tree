@@ -1,0 +1,43 @@
+<!-- Ver 2.0 không linkify nội dung sau khi dịch -->
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons left>
+      <button ion-button icon-only color="primary" (click)="onClickGoBack()">
+        <ion-icon name="ios-arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>{{contacts[newsData.username]&&contacts[newsData.username].fullname?contacts[newsData.username].fullname:newsData.username}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <!-- Thanh thông tin người dùng ở đây -->
+  <user-card [userData]="newsData" [ownerData]="userInfo" [contactData]="contacts" (onClickSub)="onClickMore($event,newsData.id)"></user-card>
+
+  <!-- Ô hiển thị đầy đủ thông tin của tin tức sau khi chuyển đổi html -->
+  <p text-wrap [innerHtml]="newsData.content | newline"></p>
+
+  <!-- Các hình ảnh được hiển thị lên đây, cho phép bấm xem chi tiết và xóa từng ảnh, hoặc thêm ảnh -->
+  <div *ngIf="newsData?.medias?.length>0">
+    <!-- Ảnh chi tiết từng ảnh sẽ hiển thị tuần tự cho phép xóa, chỉnh sửa -->
+    <div class="card-background" *ngFor="let md of newsData.medias; let idx = index;">
+        <!-- Hiển thị từng ảnh với kích cỡ thật khác nhau theo độ rộng của component -->
+        <img class="one-image" *ngIf="md.src" [src]="md.src" alt="{{md.alt}}" (click)="onClickImage(md.src)" />
+        <p class="one-image" [innerHtml]="md.alt | newline"></p>
+        <!-- Các lệnh like comment share từng ảnh hiển thị -->
+
+    </div>
+  </div>
+
+  <!-- Liệt kê các file chọn được -->
+  <ion-item *ngFor="let file of newsData.files; let idx=index;">
+    <ion-avatar item-start tappable (click)="onClickViewFile(file)">
+      <img *ngIf="file?.type" src="{{file.type | iconType}}">
+    </ion-avatar>
+    <ion-label>{{file?.alt}}</ion-label>
+  </ion-item>
+
+  <!-- Các kết quả và hành động cho người dùng nằm ở cuối -->
+  <social-card [ownerData]="userInfo" [resultData]="newsData.results" [actionData]="newsData.actions" (onClickSub)="onClickAction($event,newsData.id)"></social-card>
+
+</ion-content>

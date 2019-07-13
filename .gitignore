@@ -1,0 +1,52 @@
+
+*~
+*.sw[mnpcod]
+*.log
+*.tmp
+*.tmp.*
+log.txt
+*.sublime-project
+*.sublime-workspace
+.vscode/
+npm-debug.log*
+
+.idea/
+.ionic/
+.sourcemaps/
+.sass-cache/
+.tmp/
+.versions/
+#coverage/
+#dist/
+node_modules/
+tmp/
+#khong chuyen file database len vi se bi ghi de mat so lieu
+#/db/*.db
+temp/
+#khong day google-key
+www/
+www/index.html
+#khong day google-key
+src/index.html
+#khong truyen file upload len hoac xuong
+upload_files/
+
+#khong chuyen file database len vi se bi ghi de mat so lieu
+#/db/*.db
+db/database/
+db/excel/~$*.*
+
+
+
+#khong truyen file screen_shot_images len
+#screen_shot_images/
+platforms/
+plugins/
+plugins/android.json
+plugins/ios.json
+$RECYCLE.BIN/
+
+.DS_Store
+Thumbs.db
+UserInterfaceState.xcuserstate
+#.gitignore

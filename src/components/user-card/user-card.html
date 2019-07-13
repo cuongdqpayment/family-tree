@@ -1,0 +1,24 @@
+<!-- userData cần phải chứa .username == username, .id, .time là thời gian của tin tức -->
+<ion-item  *ngIf="userData">
+    <!-- Cần truyền thêm ownerData = userInfo là username được login vào -->
+    <ion-avatar item-start *ngIf="ownerData?.username===userData.username">
+        <img *ngIf="ownerData?.data?.image" [src]="ownerData?.data?.image">
+        <img *ngIf="!(ownerData?.data?.image)" src="assets/imgs/no-image-go.jpg">
+    </ion-avatar>
+    <ion-title *ngIf="ownerData?.username===userData.username">{{ownerData?.data?.fullname?ownerData?.data?.fullname:ownerData?.username}}</ion-title>
+    <!-- Cần phải truyền cho form danh danh bạ chứa thông tin người dùng -->
+    <ion-avatar item-start *ngIf="ownerData?.username!==userData.username">
+        <img *ngIf="contactData[userData.username]&&contactData[userData.username].avatar" [src]="contactData[userData.username].avatar">
+        <img *ngIf="!(contactData[userData.username]&&contactData[userData.username].avatar)" src="assets/imgs/no-image-go.jpg">
+    </ion-avatar>
+    <ion-title *ngIf="ownerData?.username!==userData.username">{{contactData[userData.username]&&contactData[userData.username].fullname?contactData[userData.username].fullname:userData.username}}</ion-title>
+    <!-- Tin tức được post lên thời gian nào -->
+    <ion-note style="color: gray">
+        {{userData.time | timeAgo}}
+        <ion-icon name="{{(statusIcon[userData.status]?statusIcon[userData.status]:'md-globe')}}"></ion-icon>
+    </ion-note>
+    <!-- nút more infor sẽ hiển thị thông tin của username này lên, bằng backgroud, ảnh đại diện, tên hiển thị -->
+    <button *ngIf="ownerData" item-end icon-only ion-button clear small color="primary" (click)="onClickMore($event,ownerData?.username===userData.username,(statusIcon[userData.status]?statusIcon[userData.status]:'md-globe'))">
+        <ion-icon name="more"></ion-icon>
+    </button>
+</ion-item>

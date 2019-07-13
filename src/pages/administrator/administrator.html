@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar>
+
+    <ion-buttons left>
+      <button ion-button icon-only color="primary" (click)="goBack()">
+        <ion-icon name="ios-arrow-back-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-searchbar *ngIf="isSearch" 
+      placeholder="Tìm theo mã/tên khách hàng/khu vực/người quản lý hoặc số điện thoại"
+      [(ngModel)]="searchString" 
+      [showCancelButton]="shouldShowCancel" 
+      (ionInput)="onInput($event)"
+      (keyup.enter)="searchEnter()" 
+      (keyup.esc)="searchEnter()" 
+      (focusout)="searchEnter()"
+      start>
+    </ion-searchbar>
+
+    <ion-title *ngIf="!isSearch">USERS - Người sử dụng</ion-title>
+
+    <ion-buttons right *ngIf="!isSearch">
+      <button ion-button icon-only color="dark" (click)="goSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <!-- Phần bộ công cụ kéo xuống đọc dữ liệu -->
+  <ion-refresher (ionRefresh)="doInfinite($event,'UP')">
+    <ion-refresher-content 
+      pullingIcon="arrow-dropdown" 
+      pullingText="Load dữ liệu mới hơn..." 
+      refreshingSpinner="circles"
+      refreshingText="Đang tải...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+
+    <ion-item-sliding #slidingItem class="background-list" *ngFor="let user of users">
+
+      <ion-item #item color="{{(user.status===2?'secondary':user.status===0?'danger':'')}}" class="background-item">
+        <ion-avatar item-start *ngIf="user.image">
+          <img [src]="user.image">
+        </ion-avatar>
+        <h2>{{user.id}} - {{user.username}}</h2>
+        <p>{{user.fullname}}</p>
+        <p>{{user.phone}}</p>
+        <p>{{user.email}}</p>
+        <ion-note>{{user.cust_type}} {{user.charge}} </ion-note>
+        <ion-note item-end color="{{(user.status?'primary':'')}}">
+          {{user.status===1?"Hoạt động":user.status===2?"Chờ active":"Đã khóa"}}
+          <p>{{user.change_time | date:"HH:mm dd-M-yy"}}</p>
+        </ion-note>
+      </ion-item>
+
+      <ion-item-options>
+        <button ion-button color="secondary" (click)="onClickDetails(slidingItem, user, 'EDIT')">
+          <ion-icon name="print"></ion-icon>
+          Phân quyền
+        </button>
+        <button ion-button color="danger" (click)="onClickDetails(slidingItem, user, 'DELETE')">
+          <ion-icon name="list-box"></ion-icon>
+          {{user.status===1?"Khóa":"Kích hoạt"}}
+        </button>
+      </ion-item-options>
+
+      <ion-item-options side="left">
+        <button ion-button color="primary" expandable (click)="onClickDetails(slidingItem, user, 'RELOAD')">
+          <ion-icon name="checkmark"></ion-icon>
+          <div>Reload</div>
+          <ion-spinner id="archive-spinner"></ion-spinner>
+        </button>
+      </ion-item-options>
+
+    </ion-item-sliding>
+
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event,'DOWN')">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Load dữ liệu cũ hơn...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>
